@@ -1,0 +1,5 @@
+com\mbv\inventory\service\impl\InventoryServiceImpl.class
+com\mbv\inventory\service\impl\VpGdnServiceImpl.class
+com\mbv\inventory\service\impl\VpWarehProdTranServiceImpl.class
+com\mbv\inventory\service\impl\VpGrnServiceImpl.class
+com\mbv\inventory\service\impl\DeliveryServiceImpl.class

@@ -1,0 +1,12 @@
+com\mbv\biz\config\bean\OrderBean.class
+com\mbv\biz\config\bean\ChartBean.class
+com\mbv\biz\config\bean\DegModifyBean.class
+com\mbv\biz\config\bean\VenRnkDtlBean.class
+com\mbv\biz\config\iface\bean\OrgResponse.class
+com\mbv\biz\config\bean\WnBean.class
+com\mbv\biz\config\bean\VenRnkBean.class
+com\mbv\biz\config\bean\DegBean.class
+com\mbv\biz\config\bean\DataDictionaryBean.class
+com\mbv\biz\config\bean\WnOrderBean.class
+com\mbv\biz\config\bean\UserBean.class
+com\mbv\biz\config\bean\DegDtlBean.class

@@ -1,0 +1,12 @@
+com\mbv\inventory\bean\InventoryBean.class
+com\mbv\inventory\bean\VpGdnBean.class
+com\mbv\inventory\bean\GoodBean.class
+com\mbv\inventory\bean\PdfDetail.class
+com\mbv\inventory\bean\ProductBrandInfo.class
+com\mbv\inventory\bean\DeliveryBean.class
+com\mbv\inventory\bean\PickBean.class
+com\mbv\inventory\bean\WarehProdTranBean.class
+com\mbv\inventory\bean\ProductSkuInfo.class
+com\mbv\inventory\bean\ProductInfo.class
+com\mbv\inventory\bean\DeliveryDataSource.class
+com\mbv\inventory\bean\VpGrnBean.class

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mbv.biz.config.dao.DegEntityMapper" >
+
+<resultMap id="ResultMap" type="com.mbv.biz.config.bean.ChartBean" >
+    <result column="unit_code" property="unitCode" jdbcType="VARCHAR" />
+    <result column="ttl_qty" property="ttlQty" jdbcType="DECIMAL" />
+    <result column="ttl_val" property="ttlVal" jdbcType="DECIMAL" />
+    <result column="amount" property="amount" jdbcType="INTEGER" />
+    <result column="doc_date" property="docDate" jdbcType="TIMESTAMP" />
+    <result column="hour" property="hour" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="selectDegTotalByUnitCode" resultMap="ResultMap" parameterType="java.lang.String" >
+    SELECT deg.unit_code,SUM(deg.ttl_qty) AS ttl_qty,SUM(deg.ttl_val) AS ttl_val, count(1) as amount
+      FROM vp_deg deg 
+      WHERE deg.unit_code = #{unitCode} GROUP BY deg.unit_code;
+  </select>
+  
+  <select id="selectDegTotalByUnitCodeAndDay" resultMap="ResultMap" parameterType="java.lang.String" >
+    SELECT deg.ttl_qty,deg.ttl_val, CONVERT(SUBSTR(deg.doc_date,12,2),SIGNED) as hour, COUNT(1) AS  amount 
+       FROM vp_deg deg 
+      WHERE deg.unit_code = #{unitCode} GROUP BY CONVERT(SUBSTR(deg.doc_date,12,2),SIGNED);
+  </select>
+  
+</mapper>

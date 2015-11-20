@@ -1,0 +1,10 @@
+com\mbv\biz\config\iface\service\impl\UDCommServiceImpl.class
+com\mbv\biz\config\service\impl\SysParameterServiceImpl.class
+com\mbv\biz\config\iface\service\impl\NewErpOrgServiceImpl.class
+com\mbv\biz\config\service\impl\WnServiceImpl.class
+com\mbv\biz\config\service\impl\ReportServiceImpl.class
+com\mbv\biz\config\mq\service\impl\MqWnServiceImpl.class
+com\mbv\biz\config\service\impl\UserServiceImpl.class
+com\mbv\biz\config\service\impl\ChartServiceImpl.class
+com\mbv\biz\config\mq\service\impl\MqWnServiceImpl$1.class
+com\mbv\biz\config\iface\service\impl\UDCommServiceBLL.class

@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mbv.biz.config.dao.impl.VenRnkEntityDao">
+	<resultMap id="BaseResultMap" type="com.mbv.biz.config.entity.VenRnkEntity">
+		<result column="prod_num" property="prodNum" jdbcType="VARCHAR" />
+		<result column="price" property="ttPrice" jdbcType="NUMERIC" />
+		<result column="qty" property="ttQty" jdbcType="NUMERIC" />
+		<result column="stk_on_hand" property="stkOnHand" jdbcType="NUMERIC" />
+	</resultMap>
+	
+	<resultMap id="ResultMap" type="com.mbv.biz.config.bean.ChartBean" >
+    <result column="qty" property="ttlQty" jdbcType="DECIMAL" />
+    <result column="price" property="ttlVal" jdbcType="DECIMAL" />
+    <result column="time" property="hour" jdbcType="VARCHAR" />
+  </resultMap>
+  
+	
+	<select id="selectProNumClsList" resultType="java.lang.String" >
+		SELECT SUBSTR(prod_num,1,6) from vp_wareh_prod prod group by SUBSTR(prod.prod_num,1,6)
+	</select>
+	
+	<select id="selectProNumClsListCount" resultType="java.lang.Integer">
+		SELECT count(1) from (SELECT 1 from vp_wareh_prod prod group by SUBSTR(prod.prod_num,1,6))vp_prod_num
+	</select>
+	
+
+	<select id="selectVenkRnkByParams" resultMap="BaseResultMap" parameterType="com.mbv.biz.config.bean.VenRnkBean">
+		SELECT deg_dtl.prod_num,deg_dtl.price,deg_dtl.qty,vendor.stk_on_hand
+		from vp_wareh_prod vendor
+		JOIN
+
+		(SELECT dtl.prod_num,sum(dtl.unit_price*dtl.qty) price,sum(dtl.qty) qty from
+		vp_deg deg JOIN vp_deg_dtl dtl on deg.id=dtl.vp_deg_id 
+		WHERE  deg.doc_state &lt;>'8' 
+		<if test="date1 != null and date1 != '' and date2 != null and date2 != '' ">
+		and deg.doc_date >=str_to_date(#{date1,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s') and  deg.doc_date &lt;= str_to_date(#{date2,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+		</if>
+		<if test="date1 != null and date1 != '' and (date2 == null or date2 == '') ">
+		and deg.doc_date >=str_to_date(#{date1,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s') 
+		</if>
+		<if test="date2 != null and date2 != '' and (date1 == null or date1 == '') ">
+		and  deg.doc_date &lt;= str_to_date(#{date2,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+		</if>
+		
+		 GROUP	BY dtl.prod_num ) deg_dtl 
+		on vendor.prod_num=deg_dtl.prod_num
+		where 1=1
+		<if test="prodNum != null and prodNum != ''">
+			and deg_dtl.prod_num = #{prodNum,jdbcType=VARCHAR}
+		</if>
+  
+	</select>
+	
+	
+	<select id="selectVenkRnkParent" resultMap="BaseResultMap" parameterType="com.mbv.biz.config.bean.VenRnkBean">
+  	SELECT SUBSTR(dtl_vendor.prod_num,1,6) prod_num,sum(dtl_vendor.price) price,sum(dtl_vendor.qty) qty ,SUM(dtl_vendor.stk_on_hand) stk_on_hand FROM
+
+	(SELECT deg_dtl.prod_num prod_num,deg_dtl.price price,deg_dtl.qty qty,vendor.stk_on_hand stk_on_hand
+		from vp_wareh_prod vendor
+		JOIN
+
+		(SELECT dtl.prod_num,sum(dtl.unit_price*dtl.qty) price,sum(dtl.qty) qty from
+		vp_deg deg JOIN vp_deg_dtl dtl on deg.id=dtl.vp_deg_id 
+		WHERE  deg.doc_state &lt;>'8' 
+
+		
+		 GROUP	BY dtl.prod_num ) deg_dtl 
+		on vendor.prod_num=deg_dtl.prod_num) dtl_vendor
+
+ 		GROUP	BY SUBSTR(dtl_vendor.prod_num,1,6)
+	</select>
+	
+	
+	<select id="selectVenkRnkChild" resultMap="BaseResultMap" parameterType="com.mbv.biz.config.bean.VenRnkBean">
+  	SELECT deg_dtl.prod_num prod_num,deg_dtl.price price,deg_dtl.qty qty,vendor.stk_on_hand stk_on_hand
+		from vp_wareh_prod vendor
+		JOIN
+
+		(SELECT dtl.prod_num,sum(dtl.unit_price*dtl.qty) price,sum(dtl.qty) qty from
+		vp_deg deg JOIN vp_deg_dtl dtl on deg.id=dtl.vp_deg_id 
+		WHERE  deg.doc_state &lt;>'8' 
+
+		
+		 GROUP	BY dtl.prod_num ) deg_dtl 
+		on vendor.prod_num=deg_dtl.prod_num
+
+	where SUBSTR(deg_dtl.prod_num,1,6)=#{prodNum,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="selectVenkRnkParentCount" resultType="java.lang.Integer" parameterType="com.mbv.biz.config.bean.VenRnkBean">
+	SELECT count(1) FROM
+	(SELECT 1 FROM
+
+	(SELECT deg_dtl.prod_num prod_num,deg_dtl.price price,deg_dtl.qty qty,vendor.stk_on_hand stk_on_hand
+		from vp_wareh_prod vendor
+		JOIN
+
+		(SELECT dtl.prod_num,sum(dtl.unit_price*dtl.qty) price,sum(dtl.qty) qty from
+		vp_deg deg JOIN vp_deg_dtl dtl on deg.id=dtl.vp_deg_id 
+		WHERE  deg.doc_state &lt;>'8' 
+
+		
+		 GROUP	BY dtl.prod_num ) deg_dtl 
+		on vendor.prod_num=deg_dtl.prod_num) dtl_vendor
+
+ GROUP	BY SUBSTR(dtl_vendor.prod_num,1,6)) ven_count
+	</select>
+	
+	
+	
+	
+	<select id="selectRnkByParamsCount" resultType="java.lang.Integer" parameterType="com.mbv.biz.config.bean.VenRnkBean">
+		SELECT count(1)
+		from vp_wareh_prod vendor
+		JOIN
+
+		(SELECT dtl.prod_num,sum(dtl.unit_price*dtl.qty) price,sum(dtl.qty) qty from
+		vp_deg deg JOIN vp_deg_dtl dtl on deg.id=dtl.vp_deg_id 
+		WHERE  deg.doc_state &lt;>'8' 
+		
+		<if test="date1 != null and date1 != '' and date2 != null and date2 != '' ">
+		and deg.doc_date >=str_to_date(#{date1,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s') and  deg.doc_date &lt;= str_to_date(#{date2,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+		</if>
+		<if test="date1 != null and date1 != '' and (date2 == null or date2 == '') ">
+		and deg.doc_date >=str_to_date(#{date1,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s') 
+		</if>
+		<if test="date2 != null and date2 != '' and (date1 == null or date1 == '') ">
+		and  deg.doc_date &lt;= str_to_date(#{date2,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s')
+		</if>
+		
+		
+		 GROUP	BY dtl.prod_num ) deg_dtl 
+		on vendor.prod_num=deg_dtl.prod_num
+		where 1=1
+		<if test="prodNum != null and prodNum != ''">
+			and deg_dtl.prod_num = #{prodNum,jdbcType=VARCHAR}
+		</if>
+  
+	</select>
+	
+	<select id="selectProByProNumAndDay" resultMap="ResultMap" parameterType="com.mbv.biz.config.bean.VenRnkBean" >
+	SELECT DATE_FORMAT(deg.doc_date,'%H') time,sum(dtl.unit_price*dtl.qty) price,sum(dtl.qty) qty from
+		vp_deg deg JOIN vp_deg_dtl dtl on deg.id=dtl.vp_deg_id 
+		WHERE  deg.doc_state &lt;>'8'
+
+ 	AND DATE_FORMAT(deg.doc_date,'%Y-%m-%d') = #{date1,jdbcType=VARCHAR}
+ 	<if test="prodNum != null and prodNum != ''">
+	AND SUBSTR(dtl.prod_num,1,6) =  #{prodNum,jdbcType=VARCHAR} 
+	</if>
+ 		GROUP	BY DATE_FORMAT(deg.doc_date,'%H')
+  </select>
+	
+  <select id="selectProByProNumAndDaySKU" resultMap="ResultMap" parameterType="com.mbv.biz.config.bean.VenRnkBean" >
+	SELECT DATE_FORMAT(deg.doc_date,'%H') time,sum(dtl.unit_price*dtl.qty) price,sum(dtl.qty) qty from
+		vp_deg deg JOIN vp_deg_dtl dtl on deg.id=dtl.vp_deg_id 
+		WHERE  deg.doc_state &lt;>'8'
+	AND DATE_FORMAT(deg.doc_date,'%Y-%m-%d') = #{date1,jdbcType=VARCHAR}
+	<if test="prodNum != null and prodNum != ''">
+ 	AND dtl.prod_num =  #{prodNum,jdbcType=VARCHAR}  
+ 	</if>
+ 	GROUP	BY DATE_FORMAT(deg.doc_date,'%H')
+  </select>
+  
+	<select id="selectProByProNumAndWeek" resultMap="ResultMap" parameterType="com.mbv.biz.config.bean.VenRnkBean" >
+	SELECT DATE_FORMAT(deg.doc_date,'%Y-%m-%d') time,sum(dtl.unit_price*dtl.qty) price,sum(dtl.qty) qty from
+		vp_deg deg JOIN vp_deg_dtl dtl on deg.id=dtl.vp_deg_id 
+		WHERE  deg.doc_state &lt;>'8'
+
+ 	AND DATE_FORMAT(deg.doc_date,'%Y-%m-%d') >= #{date1,jdbcType=VARCHAR} AND #{date2,jdbcType=VARCHAR}>=DATE_FORMAT(deg.doc_date,'%Y-%m-%d')
+ 	<if test="prodNum != null and prodNum != ''">
+	AND SUBSTR(dtl.prod_num,1,6) =  #{prodNum,jdbcType=VARCHAR} 
+	</if>
+ 	GROUP	BY DATE_FORMAT(deg.doc_date,'%Y-%m-%d')
+  </select>
+  
+  
+  <select id="selectProByProNumAndWeekSKU" resultMap="ResultMap" parameterType="com.mbv.biz.config.bean.VenRnkBean" >
+	SELECT DATE_FORMAT(deg.doc_date,'%Y-%m-%d') time,sum(dtl.unit_price*dtl.qty) price,sum(dtl.qty) qty from
+		vp_deg deg JOIN vp_deg_dtl dtl on deg.id=dtl.vp_deg_id 
+		WHERE  deg.doc_state &lt;>'8'
+	AND DATE_FORMAT(deg.doc_date,'%Y-%m-%d') >= #{date1,jdbcType=VARCHAR} AND #{date2,jdbcType=VARCHAR}>=DATE_FORMAT(deg.doc_date,'%Y-%m-%d')
+	<if test="prodNum != null and prodNum != ''">
+ 	AND dtl.prod_num =  #{prodNum,jdbcType=VARCHAR}   
+ 	</if>
+ 	GROUP	BY DATE_FORMAT(deg.doc_date,'%Y-%m-%d')
+  </select>
+  
+  
+  	<select id="selectProByProNumAndMonth" resultMap="ResultMap" parameterType="com.mbv.biz.config.bean.VenRnkBean" >
+	SELECT DATE_FORMAT(deg.doc_date,'%Y-%m-%d') time,sum(dtl.unit_price*dtl.qty) price,sum(dtl.qty) qty from
+		vp_deg deg JOIN vp_deg_dtl dtl on deg.id=dtl.vp_deg_id 
+		WHERE  deg.doc_state &lt;>'8'
+
+ 	AND DATE_FORMAT(deg.doc_date,'%Y-%m') = #{date1,jdbcType=VARCHAR}
+ 	<if test="prodNum != null and prodNum != ''">
+	AND SUBSTR(dtl.prod_num,1,6) =  #{prodNum,jdbcType=VARCHAR} 
+	</if>
+ 	GROUP	BY DATE_FORMAT(deg.doc_date,'%Y-%m-%d')
+  </select>
+	
+  <select id="selectProByProNumAndMonthSKU" resultMap="ResultMap" parameterType="com.mbv.biz.config.bean.VenRnkBean" >
+	SELECT DATE_FORMAT(deg.doc_date,'%Y-%m-%d') time,sum(dtl.unit_price*dtl.qty) price,sum(dtl.qty) qty from
+		vp_deg deg JOIN vp_deg_dtl dtl on deg.id=dtl.vp_deg_id 
+		WHERE  deg.doc_state &lt;>'8'
+	AND DATE_FORMAT(deg.doc_date,'%Y-%m') = #{date1,jdbcType=VARCHAR}
+<if test="prodNum != null and prodNum != ''">
+ 	AND dtl.prod_num =  #{prodNum,jdbcType=VARCHAR} 
+ 	</if>
+ 	 GROUP	BY DATE_FORMAT(deg.doc_date,'%Y-%m-%d')
+  </select>
+  
+	
+	<select id="selectRnkParentByDay" resultMap="BaseResultMap" parameterType="com.mbv.biz.config.bean.VenRnkBean">
+SELECT rank_parent.prod_num prod_num,rank_parent.price price,rank_parent.qty qty,rank_parent.stk_on_hand stk_on_hand  from (
+SELECT vendor.prod_num,if(deg_dtl.price is NULL,0,deg_dtl.price) price,if(deg_dtl.qty is NULL,0,deg_dtl.qty) qty,vendor.stk_on_hand
+FROM
+(SELECT SUBSTR(prod_num,1,6) prod_num,sum(stk_on_hand)stk_on_hand
+		from vp_wareh_prod WHERE wareh_code = #{warehCode,jdbcType=VARCHAR} 
+		<if test="prodNumList != null and prodNumList.size()>0" >
+		AND SUBSTR(prod_num,1,6)  IN   
+		
+		<foreach collection="prodNumList" item="item" index="index" open="(" separator="," close=")">
+		#{item}
+        </foreach>
+		</if>
+group by SUBSTR(prod_num,1,6)) vendor
+LEFT JOIN
+
+
+		(SELECT SUBSTR(dtl.prod_num,1,6) prod_num,sum(dtl.unit_price*dtl.qty) price,sum(dtl.qty) qty from
+		vp_deg deg JOIN vp_deg_dtl dtl on deg.id=dtl.vp_deg_id 
+		WHERE  deg.doc_state &lt;>'8' AND deg.unit_code = #{unitCode,jdbcType=VARCHAR} 
+		<if test="prodNumList != null  and prodNumList.size()>0" >
+		AND SUBSTR(dtl.prod_num,1,6)  IN   
+		
+		<foreach collection="prodNumList" item="item" index="index" open="(" separator="," close=")">
+		#{item}
+        </foreach>
+		</if>
+
+		AND
+		<if test="dateFlag =='day' " >
+		DATE_FORMAT(deg.doc_date,'%Y-%m-%d') = #{date1,jdbcType=VARCHAR}
+		</if>
+		
+		<if test="dateFlag =='month' " >
+		DATE_FORMAT(deg.doc_date,'%Y-%m') = #{date1,jdbcType=VARCHAR}
+		</if>
+		
+		<if test="dateFlag =='week' " >
+		DATE_FORMAT(deg.doc_date,'%Y-%m-%d') >= #{date1,jdbcType=VARCHAR} AND #{date2,jdbcType=VARCHAR}>=DATE_FORMAT(deg.doc_date,'%Y-%m-%d')
+		</if>
+		
+
+
+		
+		 GROUP	BY SUBSTR(prod_num,1,6) ) deg_dtl 
+		 ON vendor.prod_num = deg_dtl.prod_num
+)rank_parent 
+
+		
+		<if test="orderId==1 and orderFlag==0" >
+		ORDER BY rank_parent.price ASC
+		</if>
+
+		<if test="orderId==1 and orderFlag==1" >
+		ORDER BY rank_parent.price DESC
+		</if> 
+		
+		<if test="orderId==2 and orderFlag==0" >
+		ORDER BY rank_parent.qty ASC
+		</if>
+		
+		<if test="orderId==2 and orderFlag==1" >
+		ORDER BY rank_parent.qty DESC
+		</if>
+		
+		<if test="orderId==3 and orderFlag==0" >
+		ORDER BY rank_parent.stk_on_hand ASC
+		</if>
+		
+		<if test="orderId==3 and orderFlag==1" >
+		ORDER BY rank_parent.stk_on_hand DESC
+		</if>
+
+
+		LIMIT 0,#{rankNum,jdbcType=INTEGER}
+	</select>
+	
+
+		<select id="selectRnkChildByDay" resultMap="BaseResultMap" parameterType="com.mbv.biz.config.bean.VenRnkBean">
+SELECT vendor.prod_num,if(deg_dtl.price is NULL,0,deg_dtl.price) price,if(deg_dtl.qty is NULL,0,deg_dtl.qty) qty,vendor.stk_on_hand
+
+ FROM
+(SELECT prod_num,sum(stk_on_hand)stk_on_hand
+		from vp_wareh_prod WHERE wareh_code = #{warehCode,jdbcType=VARCHAR} 
+		<if test="prodNumList != null  and prodNumList.size()>0" >
+		AND SUBSTR(prod_num,1,6)  IN   
+		
+		<foreach collection="prodNumList" item="item" index="index" open="(" separator="," close=")">
+		#{item}
+        </foreach>
+		</if>
+		
+group by prod_num) vendor
+LEFT JOIN
+		(SELECT dtl.prod_num,sum(dtl.unit_price*dtl.qty) price,sum(dtl.qty) qty from
+		vp_deg deg JOIN vp_deg_dtl dtl on deg.id=dtl.vp_deg_id 
+		WHERE  deg.doc_state &lt;>'8'  AND deg.unit_code = #{unitCode,jdbcType=VARCHAR} 
+
+		<if test="prodNumList != null  and prodNumList.size()>0" >
+		AND SUBSTR(dtl.prod_num,1,6)  IN   
+		
+		<foreach collection="prodNumList" item="item" index="index" open="(" separator="," close=")">
+		#{item}
+        </foreach>
+		</if>
+	
+		AND
+	
+		<if test="dateFlag =='day' " >
+		DATE_FORMAT(deg.doc_date,'%Y-%m-%d') = #{date1,jdbcType=VARCHAR}
+		</if>
+		
+		<if test="dateFlag =='month' " >
+		DATE_FORMAT(deg.doc_date,'%Y-%m') = #{date1,jdbcType=VARCHAR}
+		</if>
+		
+		<if test="dateFlag =='week' " >
+		DATE_FORMAT(deg.doc_date,'%Y-%m-%d') >= #{date1,jdbcType=VARCHAR} AND #{date2,jdbcType=VARCHAR}>=DATE_FORMAT(deg.doc_date,'%Y-%m-%d')
+		</if>
+		
+
+		
+		 GROUP	BY dtl.prod_num ) deg_dtl 
+on vendor.prod_num=deg_dtl.prod_num 
+
+	</select>
+	
+	
+	
+			<select id="selectRnkChildByDayBak" resultMap="BaseResultMap" parameterType="com.mbv.biz.config.bean.VenRnkBean">
+SELECT vendor.prod_num,if(deg_dtl.price is NULL,0,deg_dtl.price) price,if(deg_dtl.qty is NULL,0,deg_dtl.qty) qty,vendor.stk_on_hand
+
+ FROM
+(SELECT prod_num,sum(stk_on_hand)stk_on_hand
+		from vp_wareh_prod WHERE wareh_code = #{warehCode,jdbcType=VARCHAR} 
+		<if test="prodNum != null and prodNum !='' " >
+	AND SUBSTR(prod_num,1,6) =  #{prodNum,jdbcType=VARCHAR} 
+		</if>
+group by prod_num) vendor
+LEFT JOIN
+		(SELECT dtl.prod_num,sum(dtl.unit_price*dtl.qty) price,sum(dtl.qty) qty from
+		vp_deg deg JOIN vp_deg_dtl dtl on deg.id=dtl.vp_deg_id 
+		WHERE  deg.doc_state &lt;>'8'  AND deg.unit_code = #{unitCode,jdbcType=VARCHAR} 
+		<if test="prodNum != null and prodNum !='' " >
+	AND SUBSTR(dtl.prod_num,1,6) =  #{prodNum,jdbcType=VARCHAR} 
+		</if>		
+
+
+		AND
+	
+		<if test="dateFlag =='day' " >
+		DATE_FORMAT(deg.doc_date,'%Y-%m-%d') = #{date1,jdbcType=VARCHAR}
+		</if>
+		
+		<if test="dateFlag =='month' " >
+		DATE_FORMAT(deg.doc_date,'%Y-%m') = #{date1,jdbcType=VARCHAR}
+		</if>
+		
+		<if test="dateFlag =='week' " >
+		DATE_FORMAT(deg.doc_date,'%Y-%m-%d') >= #{date1,jdbcType=VARCHAR} AND #{date2,jdbcType=VARCHAR}>=DATE_FORMAT(deg.doc_date,'%Y-%m-%d')
+		</if>
+		
+
+		
+		 GROUP	BY dtl.prod_num ) deg_dtl 
+on vendor.prod_num=deg_dtl.prod_num 
+
+	</select>
+	
+	
+	
+	
+	
+	
+	
+
+</mapper>

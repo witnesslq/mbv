@@ -1,0 +1,10 @@
+com\mbv\inventory\entity\DeliveryEntity.class
+com\mbv\inventory\entity\VpGrnDtlEntity.class
+com\mbv\inventory\entity\VpWarehProdTranEntity.class
+com\mbv\inventory\entity\VpDegModifyRecordEntity.class
+com\mbv\inventory\entity\VpGrnEntity.class
+com\mbv\inventory\entity\VpGdnDtlEntity.class
+com\mbv\inventory\entity\VpSenderEntity.class
+com\mbv\inventory\entity\DegDtlEntity.class
+com\mbv\inventory\entity\InventoryEntity.class
+com\mbv\inventory\entity\VpGdnEntity.class

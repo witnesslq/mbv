@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mbv.biz.config.iface.dao.impl.UDCommWnDao" >
+  <resultMap id="BaseResultMap" type="com.mbv.comm.bean.VpWnEntity" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="order_sn" property="orderSn" jdbcType="VARCHAR" />
+    <result column="reply_content" property="replyContent" jdbcType="VARCHAR" />
+    <result column="doc_state" property="docState" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, order_sn, reply_content, doc_state 
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from vp_wn
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <update id="updateTradeResult" parameterType="com.mbv.comm.bean.VpWnEntity" >
+  	update vp_wn
+  	set reply_content = #{replyContent,jdbcType=VARCHAR},
+  	doc_state='2', cancel_date = now(),
+  	last_modified_user='OS_Admin', last_modified_date = now() 
+  	where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  </mapper>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mbv.biz.config.iface.dao.impl.UDCommWarehProdDao" >
+  <resultMap id="BaseResultMap" type="com.mbv.biz.config.entity.iface.VpWarehProdEntity" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="wareh_code" property="warehCode" jdbcType="VARCHAR" />
+    <result column="prod_num" property="srcDocType" jdbcType="VARCHAR" />
+    <result column="stk_on_hand" property="stkOnHand" jdbcType="DECIMAL" />
+    <result column="qty_committed" property="qtyCommitted" jdbcType="DECIMAL" />
+    <result column="qty_on_lock" property="qtyOnLock" jdbcType="DECIMAL" />
+    <result column="last_modified_user" property="lastModifiedUser" jdbcType="VARCHAR" />
+    <result column="last_modified_date" property="lastModifiedDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, wareh_code, prod_num, stk_on_hand, qty_committed, qty_on_lock, last_modified_user, last_modified_date 
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from vp_wareh_prod
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <update id="updateQtyCommitted" parameterType="com.mbv.biz.config.entity.iface.VpWarehProdEntity" >
+  	update vp_wareh_prod
+  	set qty_committed = ifnull(qty_committed,0) + #{qtyCommitted,jdbcType=DECIMAL},
+  	last_modified_user='ERP_UD_Admin', last_modified_date = now() 
+  	where wareh_code = #{warehCode,jdbcType=VARCHAR} 
+  	and prod_num = #{prodNum,jdbcType=VARCHAR}
+  </update>
+  
+  </mapper>

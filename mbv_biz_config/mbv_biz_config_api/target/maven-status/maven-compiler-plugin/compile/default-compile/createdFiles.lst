@@ -1,0 +1,8 @@
+com\mbv\biz\config\service\UserService.class
+com\mbv\biz\config\service\WnService.class
+com\mbv\biz\config\service\ChartService.class
+com\mbv\biz\config\service\ReportService.class
+com\mbv\biz\config\service\SendMessageService.class
+com\mbv\biz\config\iface\service\NewErpOrgService.class
+com\mbv\biz\config\service\SysParameterService.class
+com\mbv\biz\config\mq\service\MqWnService.class

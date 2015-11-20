@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd"
+	default-lazy-init="false">
+
+	<context:annotation-config />
+	<context:component-scan base-package="com.mbv,com.mtsbw,com.metersbonwe,com.banggo" />
+	<tx:annotation-driven />
+
+	<bean id = "propertySourcesPlaceholderConfigurer"
+		class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
+		<property name="properties" ref="propertiesConfiguration" />
+		<property name="locations">
+		<list>
+			<value>classpath:prop/jdbc.properties</value>
+			<value>classpath:prop/app.properties</value>
+			<value>classpath:prop/dubbo.properties</value>
+			<!-- 缓存中心配置文件 -->
+			<value>classpath:ump_cache.properties</value>
+		</list>
+		</property>
+		<property name="ignoreResourceNotFound" value="true"/>
+	</bean>
+	
+    <!-- 属性文件读入 -->
+	<!-- **************配置与新配置中心的连接Start****************** -->
+	<!--1、 配置业务系统，如果存在多个业务系统，以逗号‘，’隔开。 -->
+	<bean id="projectCode" class="java.lang.String">
+		<constructor-arg value="mbvendor" />
+	</bean>
+	<!--2、 配置客户端加载configuration -->
+	<bean id="config"
+		class="com.mtsbw.ump.configure.client.ClientConfigInitialization">
+		<property name="projectCode" ref="projectCode"></property>
+		<property name="zkMgr" ref="zkMgr"></property>
+	</bean>
+
+	<!--4、 配置placeholder properties configuration -->
+	<bean id="propertiesConfiguration"
+		class="com.mtsbw.ump.configure.client.PropertiesConfigFactoryBean">
+		<property name="projectCode" ref="projectCode" />
+		<property name="zkMgr" ref="zkMgr" />
+	</bean>
+	<!--导入Client spring 配置文件，引入common设置-->
+	<import resource="classpath*:ump_configure_client.xml" />
+	<!-- 引入远程数据源 -->
+	<import resource="dataSource/sqlTemplate.xml"/>
+	<!-- 引入本地数据源 -->
+	<import resource="dataSource/datasource.xml"/>
+	
+	<!-- transaction -->
+	<import resource="transaction/applicationContext-transaction.xml"/>
+	<!-- <import resource="transaction/applicationContext-distributed-transaction.xml"/> -->
+	
+	<!-- mybatis -->
+	<!-- <import resource="mybatis/mybatis-config.xml"/> -->
+	<import resource="mybatis/mybatis-spring.xml"/>
+	<!-- 引入dubbo -->
+	<import resource="dubbo/spring-dubbo-server.xml"/>
+    <import resource="dubbo/spring-dubbo-client.xml"/>
+    <import resource="dubbo/spring-dubbo-stock.xml"/>
+    <import resource="dubbo/spring-dubbo-delivery.xml"/>
+    <!-- 引入MQ -->
+    <import resource="mq/spring-activemq.xml"/>
+    <!-- 引入缓存中心 -->
+	<import resource="classpath*:ump_cache.xml"/>
+
+	
+	
+</beans>

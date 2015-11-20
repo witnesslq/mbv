@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+	default-lazy-init="false">
+	
+	<bean id="expression" class="com.mtsbw.dal.template.ExpressionResult" scope="singleton"
+		init-method="init">
+		<property name="defaultDataSourceName" value="mbv_mysql_test" />
+		<property name="dataSourceConfig" value="[${dataSourceConfig.newErp_test},${dataSourceConfig.oldErp_test},${dataSourceConfig.mbv_mysql_test}]" />
+		<property name="shardMap" ref="shardMap" /> 
+		<property name="shardGroupMap" ref="shardGroupMap" />
+		<property name="expressionConfig" value="[]" />
+		<property name="routeMap" ref="routeMap" />
+		<property name="router" ref="simpleRouter" />
+		<property name="functions">
+			<map>
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="shardMap" class="java.util.HashMap">
+		<constructor-arg>
+			<map>
+				<entry key="shardNewErpW" value-ref="shardNewErpWBean" />
+				<entry key="shardOldErpW" value-ref="shardOldErpWBean" />
+				<entry key="shardMbvW" value-ref="shardMbvWBean" />
+			</map>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="shardNewErpWBean" class="com.mtsbw.dal.datasource.Shard">
+		<property name="id" value="shardNewErpW" />
+		<property name="dataSourceName" value="newErp_test" />
+		<property name="readonly" value="false" />
+		<property name="description" value="新ERP写" />
+	</bean>
+	
+	
+	<bean id="shardOldErpWBean" class="com.mtsbw.dal.datasource.Shard">
+		<property name="id" value="shardOldErpW" />
+		<property name="dataSourceName" value="oldErp_test" />
+		<property name="readonly" value="false" />
+		<property name="description" value="老ERP写" />
+	</bean>
+	
+	<bean id="shardMbvWBean" class="com.mtsbw.dal.datasource.Shard">
+		<property name="id" value="shardMbvW" />
+		<property name="dataSourceName" value="mbv_mysql_test" />
+		<property name="readonly" value="false" />
+		<property name="description" value="mbv_mysql读写" />
+	</bean>
+	
+	
+	<bean id="shardGroupMap" class="java.util.HashMap">
+		<constructor-arg>
+			<map>
+				<entry key="shardGroupNewErp" value-ref="shardGroupNewErpBean" />
+				<entry key="shardGroupOldErp" value-ref="shardGroupOldErpBean" />
+				<entry key="shardGroupMbv" value-ref="shardGroupMbvBean" />
+			</map>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="shardGroupNewErpBean" class="com.mtsbw.dal.datasource.ShardGroup">
+		<property name="id" value="shardGroupNewErp" />
+		<property name="shards" >
+			 <set>
+			 	<ref bean="shardNewErpWBean"/>
+	        </set> 
+		</property>
+		<property name="description" value="新ERP读写" />
+	</bean>
+	
+	<bean id="shardGroupOldErpBean" class="com.mtsbw.dal.datasource.ShardGroup">
+		<property name="id" value="shardGroupOldErp" />
+		<property name="shards" >
+			 <set>
+			 	<ref bean="shardOldErpWBean"/>
+	        </set> 
+		</property>
+		<property name="description" value="老ERP读写" />
+	</bean>
+	
+	<bean id="shardGroupMbvBean" class="com.mtsbw.dal.datasource.ShardGroup">
+		<property name="id" value="shardGroupMbv" />
+		<property name="shards" >
+			 <set>
+			 	<ref bean="shardMbvWBean"/>
+	        </set> 
+		</property>
+		<property name="description" value="Mbv读写" />
+	</bean>
+	
+	
+	<bean id="routeMap" class="java.util.HashMap">
+		<constructor-arg>
+			<map>
+				<entry key="newERP" value-ref="routeNewErpBean" />
+				<entry key="oldERP" value-ref="routeOldErpBean" />
+				<entry key="mbv" value-ref="routeMbvBean" />
+			</map>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="routeNewErpBean" class="com.mtsbw.dal.route.Route">
+		<property name="sqlmap" value="newerp" />
+  		<!-- <property name="expression" ref="" /> com.mtsbw.dal.expr.Expression -->
+  		<property name="shardGroups">
+  			<set>
+  				<ref bean="shardGroupNewErpBean"/>
+  			</set>
+  		</property>
+	</bean>
+	
+	<bean id="routeOldErpBean" class="com.mtsbw.dal.route.Route">
+		<property name="sqlmap" value="olderp" />
+  		<!-- <property name="expression" ref="" /> com.mtsbw.dal.expr.Expression -->
+  		<property name="shardGroups">
+  			<set>
+  				<ref bean="shardGroupOldErpBean"/>
+  			</set>
+  		</property>
+	</bean>
+	
+	<bean id="routeMbvBean" class="com.mtsbw.dal.route.Route">
+		<property name="sqlmap" value="mbv" />
+  		<!-- <property name="expression" ref="" /> com.mtsbw.dal.expr.Expression -->
+  		<property name="shardGroups">
+  			<set>
+  				<ref bean="shardGroupMbvBean"/>
+  			</set>
+  		</property>
+	</bean>
+	
+	<bean id="simpleRouter" class="com.mtsbw.dal.route.SimpleRouter">
+		<property name="routes">
+			<set>
+				<ref bean="routeNewErpBean" />
+				<ref bean="routeOldErpBean" />
+				<ref bean="routeMbvBean" />
+			</set>
+		</property>
+		<property name="readonlyPrefixs">
+			<set>
+				<value>find</value>
+				<value>get</value>
+				<value>select</value>
+				<value>login</value>
+			</set>
+		</property>
+	</bean>
+	
+	
+	<bean id="sqlMapClientTemplate" class="com.mtsbw.dal.template.impl.MyBatisTemplate">
+		<constructor-arg index="0" ref="expression" />
+		<property name="useDefaultDatasource" value="false" />
+		<property name="configLocation" value="classpath:mybatis/mybatis-config.xml" />
+ 		<property name="mapperLocations" value="classpath*:com/mbv/**/mapper/*.xml" />
+		<property name="timeout" value="60" />
+	</bean>
+	
+</beans>

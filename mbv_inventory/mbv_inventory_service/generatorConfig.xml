@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration >
+	<classPathEntry location="C:\Users\Administrator\.m2\repository\mysql\mysql-connector-java\5.1.24\mysql-connector-java-5.1.24.jar" />
+  <context id="context1" >
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://192.168.149.52:3306/mbvendor" userId="admin" password="admin52" />
+    <javaModelGenerator targetPackage="com.mbv.biz.config.entity" targetProject="mbv_biz_config_entity">
+    	<property name="enableSubPackages" value="true" />
+		<property name="trimStrings" value="true" />
+    </javaModelGenerator>
+    <sqlMapGenerator targetPackage="com.mbv.biz.config.mapper" targetProject="mbv_biz_config_dao" />
+    <javaClientGenerator targetPackage="com.mbv.biz.config.dao" targetProject="mbv_biz_config_dao" type="XMLMAPPER" />
+    <table tableName="sys_parameter" domainObjectName="SysParameter" enableCountByExample="false"
+    	enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false">
+    </table>
+  </context>
+</generatorConfiguration>

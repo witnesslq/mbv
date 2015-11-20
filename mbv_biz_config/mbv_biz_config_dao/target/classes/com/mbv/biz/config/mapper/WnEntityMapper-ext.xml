@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mbv.biz.config.dao.impl.WnEntityDao" >
+  
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.mbv.biz.config.bean.WnBean">
+    select 
+    <include refid="Base_Column_List" />
+    from mbvendor.vp_wn
+    where 1=1
+    <if test="unitCode != null and unitCode !='' " >
+        and unit_code = #{unitCode}
+    </if>
+    <if test="docState!=null and docState!='' " >
+      and doc_state = #{docState,jdbcType=VARCHAR}
+    </if>
+    <if test="orderSn != null and orderSn!=''" >
+      and order_sn like CONCAT('%','${orderSn}','%')
+    </if>
+    
+    <if test="day != null and day !='' " >
+      and SUBSTR(doc_date,1,10) = #{day}
+    </if>
+    <if test="month != null and month !='' " >
+      and SUBSTR(doc_date,1,7) = #{month}
+    </if>
+    <if test="weekFrom != null and weekFrom !=''  " >
+       <![CDATA[  and doc_date >= #{weekFrom}  ]]>
+    </if>
+    <if test="weekTo != null and weekTo !='' " >
+       <![CDATA[  and doc_date <= #{weekTo}    ]]>
+    </if>
+    order by doc_date desc
+    
+  </select>
+  
+  <select id="selectByParamsCount" resultType="java.lang.Integer" parameterType="com.mbv.biz.config.bean.WnBean" >
+    select count(1)
+    from mbvendor.vp_wn
+    where 1=1
+    <if test="unitCode != null and unitCode !='' " >
+      and unit_code = #{unitCode}
+    </if>
+    <if test="docState!=null and docState!='' " >
+      and doc_state = #{docState,jdbcType=VARCHAR}
+    </if>
+    <if test="orderSn != null and orderSn!=''" >
+      and order_sn like CONCAT('%','${orderSn}','%')
+    </if>
+    <if test="day != null and day !='' " >
+      and SUBSTR(doc_date,1,10) = #{day}
+    </if>
+    <if test="month != null and month !='' " >
+      and SUBSTR(doc_date,1,7) = #{month}
+    </if>
+    <if test="weekFrom != null and weekFrom !=''  " >
+       <![CDATA[  and doc_date >= #{weekFrom}  ]]>
+    </if>
+    <if test="weekTo != null and weekTo !='' " >
+       <![CDATA[  and doc_date <= #{weekTo}    ]]>
+    </if>
+  </select>
+  
+  <select id="selectByDocCode" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select 
+    <include refid="Base_Column_List" />
+    from mbvendor.vp_wn
+    where doc_code = #{docCode}
+  </select>
+  
+  <select id="selectMaxDocCode" resultType="java.lang.String" parameterType="java.lang.String">
+    select nextval(#{seqName,jdbcType=VARCHAR}) as doc_code
+  </select>
+  
+  <select id="selectExitsWnCount" resultType="java.lang.Integer" parameterType="com.mbv.biz.config.bean.WnBean" >
+    select count(1)
+    from mbvendor.vp_wn
+    where 1 = 1
+    <if test="unitCode != null and unitCode !='' " >
+      and unit_code = #{unitCode}
+    </if>
+    <if test="docState!=null and docState!='' " >
+      and doc_state = #{docState}
+    </if>
+    <if test="orderSn != null and orderSn!=''" >
+      and order_sn = #{orderSn}
+    </if>
+  </select>
+  
+</mapper>

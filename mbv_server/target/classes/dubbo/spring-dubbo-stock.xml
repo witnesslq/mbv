@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo  
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd  
+        ">
+     
+	<!-- registry address, used for service to register itself-->
+	<dubbo:registry protocol="zookeeper"  address="${stock.dubbo.registry}"  />
+	
+	<dubbo:reference id="stockService" interface="com.banggo.stockcenter.client.service.IStockOPService" group="unitestock_test" />
+	
+	<dubbo:reference id="systemRegionService" interface="com.metersbonwe.oms.api.region.service.SystemRegionService" check="false" group="oms_test" />
+	
+	<dubbo:reference id="rSAService" interface="com.metersbonwe.oms.api.rsa.service.RSAService" check="false" group="oms_test" />
+	
+</beans> 

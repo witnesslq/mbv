@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mbv.biz.config.dao.impl.DegEntityDao" >
+
+<resultMap id="ChartResultMap" type="com.mbv.biz.config.bean.ChartBean" >
+    <result column="unit_code" property="unitCode" jdbcType="VARCHAR" />
+    <result column="ttl_qty" property="ttlQty" jdbcType="NUMERIC" />
+    <result column="ttl_val" property="ttlVal" jdbcType="NUMERIC" />
+    <result column="amount" property="amount" jdbcType="INTEGER" />
+    <result column="doc_date" property="docDate" jdbcType="TIMESTAMP" />
+    <result column="hour" property="hour" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="OrderResultMap" type="com.mbv.biz.config.bean.DegBean" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="doc_code" property="docCode" jdbcType="VARCHAR" />
+    <result column="doc_date" property="docDate" jdbcType="TIMESTAMP" />
+    <result column="doc_state" property="docState" jdbcType="VARCHAR" />
+    <result column="unit_code" property="unitCode" jdbcType="VARCHAR" />
+    <result column="wareh_code" property="warehCode" jdbcType="VARCHAR" />
+    <result column="ttl_qty" property="ttlQty" jdbcType="NUMERIC" />
+    <result column="ttl_val" property="ttlVal" jdbcType="NUMERIC" />
+    <result column="src_doc_type" property="srcDocType" jdbcType="VARCHAR" />
+    <result column="src_doc_code" property="srcDocCode" jdbcType="VARCHAR" />
+    <result column="cust_name" property="custName" jdbcType="VARCHAR" />
+    <result column="receivables" property="receivables" jdbcType="NUMERIC" />
+    <result column="consignee" property="consignee" jdbcType="VARCHAR" />
+    <result column="moblie" property="moblie" jdbcType="VARCHAR" />
+    <result column="country" property="country" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="district" property="district" jdbcType="VARCHAR" />
+    <result column="deliv_address" property="delivAddress" jdbcType="VARCHAR" />
+    <result column="deliv_pstd" property="delivPstd" jdbcType="VARCHAR" />
+    <result column="express_code" property="expressCode" jdbcType="VARCHAR" />
+    <result column="shipping_fee" property="shippingFee" jdbcType="NUMERIC" />
+    <result column="tsp_com_code" property="tspComCode" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="last_modified_user" property="lastModifiedUser" jdbcType="VARCHAR" />
+    <result column="last_modified_date" property="lastModifiedDate" jdbcType="TIMESTAMP" />
+    <result column="picking_print_count" property="pickingPrintCount" jdbcType="INTEGER" />
+    <result column="order_sn" property="orderSn" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="order_remark" property="orderRemark" jdbcType="VARCHAR" />
+    <result column="total_ttl_qty" property="totalTtlQty" jdbcType="NUMERIC" />
+    <result column="total_ttl_val" property="totalTtlVal" jdbcType="NUMERIC" />
+    <result column="flag" property="flag" jdbcType="INTEGER" />
+    <result column="prodNum" property="prodNum" jdbcType="VARCHAR" />
+    <result column="qty" property="qty" jdbcType="NUMERIC" />
+  </resultMap>
+  <sql id="Order_Column_List" >
+    id, doc_code, doc_date, doc_state, unit_code, wareh_code, ttl_qty, ttl_val, src_doc_type, 
+    src_doc_code, cust_name, receivables, consignee, moblie, country, province, city, 
+    district, deliv_address, deliv_pstd, express_code, shipping_fee, tsp_com_code, create_user, 
+    create_date, last_modified_user, last_modified_date, picking_print_count, order_sn, 
+    remark, order_remark, flag, prod_num, qty
+  </sql>
+  
+  <select id="selectDegTotalByUnitCode" resultMap="ChartResultMap" parameterType="com.mbv.biz.config.bean.DegBean" >
+    SELECT unit_code, sum(ttl_qty) AS ttl_qty, sum(ttl_val) AS ttl_val, count(1) as amount
+      FROM mbvendor.vp_deg
+      WHERE doc_state in ('1','2')
+      <if test="unitCode != null and unitCode !='' " >
+        and unit_code = #{unitCode}
+      </if>
+      <if test="day != null and day !='' " >
+        and SUBSTR(doc_date,1,10) = #{day}
+      </if>
+      <if test="month != null and month !='' " >
+        and SUBSTR(doc_date,1,7) = #{month}
+      </if>
+      <if test="weekFrom != null and weekFrom !=''  " >
+       <![CDATA[  and doc_date >= #{weekFrom}  ]]>
+      </if>
+      <if test="weekTo != null and weekTo !='' " >
+       <![CDATA[  and doc_date <= #{weekTo}    ]]>
+      </if>
+      GROUP BY unit_code;
+  </select>
+  
+  <select id="selectDegTotalByUnitCodeAndDay" resultMap="ChartResultMap" parameterType="com.mbv.biz.config.bean.DegBean" >
+    SELECT sum(ttl_qty) AS ttl_qty, sum(ttl_val) AS ttl_val, SUBSTR(doc_date,12,2) as hour, COUNT(1) AS  amount 
+       FROM mbvendor.vp_deg
+      WHERE doc_state in ('1','2')
+      <if test="unitCode != null and unitCode !='' " >
+        and unit_code = #{unitCode}
+      </if> 
+      <if test="day != null and day !='' " >
+      and SUBSTR(doc_date,1,10) = #{day}
+      </if>
+      GROUP BY SUBSTR(doc_date,12,2);
+  </select>
+  
+  <select id="selectDegTotalByUnitCodeAndWeek" resultMap="ChartResultMap" parameterType="com.mbv.biz.config.bean.DegBean" >
+    SELECT sum(ttl_qty) AS ttl_qty, sum(ttl_val) AS ttl_val, SUBSTR(doc_date,1,10) as hour, COUNT(1) AS  amount 
+       FROM mbvendor.vp_deg
+      WHERE doc_state in ('1','2')
+      <if test="unitCode != null and unitCode !='' " >
+        and unit_code = #{unitCode}
+      </if> 
+      <if test="weekFrom != null and weekFrom !=''  " >
+       <![CDATA[  and doc_date >= #{weekFrom}  ]]>
+      </if>
+      <if test="weekTo != null and weekTo !='' " >
+       <![CDATA[  and doc_date <= #{weekTo}    ]]>
+      </if>
+      GROUP BY SUBSTR(doc_date,1,10);
+  </select>
+  
+  <select id="selectDegTotalByUnitCodeAndMonth" resultMap="ChartResultMap" parameterType="com.mbv.biz.config.bean.DegBean" >
+    SELECT sum(ttl_qty) AS ttl_qty, sum(ttl_val) AS ttl_val, SUBSTR(doc_date,1,10) as hour, COUNT(1) AS  amount 
+       FROM mbvendor.vp_deg
+      WHERE doc_state in ('1','2')
+      <if test="unitCode != null and unitCode !='' " >
+        and unit_code = #{unitCode}
+      </if> 
+      <if test="month != null and month !='' " >
+      and SUBSTR(doc_date,1,7) = #{month}
+      </if>
+      GROUP BY SUBSTR(doc_date,1,10);
+  </select>
+  
+  <!-- download excel -->
+  <select id="selectByParamsForDownload" resultMap="OrderResultMap" parameterType="com.mbv.biz.config.bean.DegBean" >
+    select 
+    id, doc_code, doc_date, (CASE doc_state WHEN '1' THEN '待发货' WHEN '2' THEN '已发货' WHEN '8' THEN '已撤销' ELSE '' END) AS doc_state, unit_code, wareh_code, ttl_qty, ttl_val, src_doc_type, 
+    src_doc_code, cust_name, receivables, consignee, moblie, country, province, city, 
+    district, deliv_address, deliv_pstd, express_code, shipping_fee, 
+		    (SELECT dtl.name FROM sys_code sc, sys_code_dtl dtl 
+		WHERE sc.sys_code_id = dtl.sys_code_id AND sc.code = 'SHIPPING_CODE'
+		AND dtl.code = tsp_com_code) as tsp_com_code, 
+    create_user, create_date, last_modified_user, last_modified_date, picking_print_count, order_sn, 
+    remark, order_remark,(SELECT COUNT(1) FROM vp_deg_modify_records WHERE vp_deg_code = doc_code) AS flag
+    from mbvendor.vp_deg
+    where 1=1
+    <if test="unitCode != null and unitCode !='' " >
+        and unit_code = #{unitCode}
+    </if>
+    <if test="id != null and id !='' " >
+      and id = #{id}
+    </if>
+    <if test="docCode != null and docCode !='' " >
+      and doc_code like CONCAT('%','${docCode}','%')
+    </if>
+    <if test="consignee != null and consignee !=''" >
+      and consignee like CONCAT('%','${consignee}','%')
+    </if>
+    <if test="docState != null and docState !='' " >
+      and doc_state = #{docState}
+    </if>
+    <if test="day != null and day !='' " >
+      and SUBSTR(doc_date,1,10) = #{day}
+    </if>
+    <if test="month != null and month !='' " >
+      and SUBSTR(doc_date,1,7) = #{month}
+    </if>
+    <if test="weekFrom != null and weekFrom !=''  " >
+       <![CDATA[  and doc_date >= #{weekFrom}  ]]>
+    </if>
+    <if test="weekTo != null and weekTo !='' " >
+       <![CDATA[  and doc_date <= #{weekTo}    ]]>
+    </if>
+    order by doc_code asc
+  </select>
+  
+  <!-- 前台界面查询库存记录 -->
+  <select id="selectByParams" resultMap="OrderResultMap" parameterType="com.mbv.biz.config.bean.DegBean" >
+    select 
+    id, doc_code, doc_date, doc_state, unit_code, wareh_code, ttl_qty, ttl_val, src_doc_type, 
+    src_doc_code, cust_name, receivables, consignee, moblie, country, province, city, 
+    district, deliv_address, deliv_pstd, express_code, shipping_fee, 
+		    (SELECT dtl.name FROM sys_code sc, sys_code_dtl dtl 
+		WHERE sc.sys_code_id = dtl.sys_code_id AND sc.code = 'SHIPPING_CODE'
+		AND dtl.code = tsp_com_code) as tsp_com_code, 
+    create_user, create_date, last_modified_user, last_modified_date, picking_print_count, order_sn, 
+    remark, order_remark,(SELECT COUNT(1) FROM vp_deg_modify_records WHERE vp_deg_code = doc_code) AS flag
+    from mbvendor.vp_deg
+    where 1=1
+    <if test="unitCode != null and unitCode !='' " >
+        and unit_code = #{unitCode}
+    </if>
+    <if test="id != null and id !='' " >
+      and id = #{id}
+    </if>
+    <if test="docCode != null and docCode !='' " >
+      and doc_code like CONCAT('%','${docCode}','%')
+    </if>
+    <if test="consignee != null and consignee !=''" >
+      and consignee like CONCAT('%','${consignee}','%')
+    </if>
+    <if test="docState != null and docState !='' " >
+      and doc_state = #{docState}
+    </if>
+    <if test="day != null and day !='' " >
+      and SUBSTR(doc_date,1,10) = #{day}
+    </if>
+    <if test="month != null and month !='' " >
+      and SUBSTR(doc_date,1,7) = #{month}
+    </if>
+    <if test="weekFrom != null and weekFrom !=''  " >
+       <![CDATA[  and doc_date >= #{weekFrom}  ]]>
+    </if>
+    <if test="weekTo != null and weekTo !='' " >
+       <![CDATA[  and doc_date <= #{weekTo}    ]]>
+    </if>
+    order by doc_date desc
+    limit 
+			#{firstPage}
+		,
+			#{length}
+  </select>
+  
+  <!-- 前台界面查询库存记录 -->
+  <select id="selectByParamsTotal" resultMap="OrderResultMap" parameterType="com.mbv.biz.config.bean.DegBean" >
+    select 
+    sum(ttl_qty) as total_ttl_qty, sum(ttl_val) as total_ttl_val
+    from mbvendor.vp_deg
+    where 1=1
+    <if test="unitCode != null and unitCode !='' " >
+      and unit_code = #{unitCode}
+    </if>
+    <if test="id != null and id !='' " >
+      and id = #{id}
+    </if>
+    <if test="docCode != null and docCode !='' " >
+      and doc_code like CONCAT('%','${docCode}','%')
+    </if>
+    <if test="consignee != null and consignee !=''" >
+      and consignee like CONCAT('%','${consignee}','%')
+    </if>
+    <if test="docState != null and docState !='' " >
+      and doc_state = #{docState}
+    </if>
+    <if test="day != null and day !='' " >
+      and SUBSTR(doc_date,1,10) = #{day}
+    </if>
+    <if test="month != null and month !='' " >
+      and SUBSTR(doc_date,1,7) = #{month}
+    </if>
+    <if test="weekFrom != null and weekFrom !=''  " >
+       <![CDATA[  and doc_date >= #{weekFrom}  ]]>
+    </if>
+    <if test="weekTo != null and weekTo !='' " >
+       <![CDATA[  and doc_date <= #{weekTo}    ]]>
+    </if>
+  </select>
+  
+  <select id="selectByParamsCount" resultType="java.lang.Integer" parameterType="com.mbv.biz.config.bean.DegBean" >
+    select count(1)
+    from mbvendor.vp_deg
+    where 1=1
+    <if test="unitCode != null and unitCode !='' " >
+      and unit_code = #{unitCode}
+    </if>
+    <if test="id != null and id !='' " >
+      and id = #{id}
+    </if>
+    <if test="docCode != null and docCode !='' " >
+      and doc_code like CONCAT('%','${docCode}','%')
+    </if>
+    <if test="consignee != null and consignee !=''" >
+      and consignee like CONCAT('%','${consignee}','%')
+    </if>
+    <if test="docState != null and docState !='' " >
+      and doc_state = #{docState}
+    </if>
+    <if test="day != null and day !='' " >
+      and SUBSTR(doc_date,1,10) = #{day}
+    </if>
+    <if test="month != null and month !='' " >
+      and SUBSTR(doc_date,1,7) = #{month}
+    </if>
+    <if test="weekFrom != null and weekFrom !=''  " >
+       <![CDATA[  and doc_date >= #{weekFrom}  ]]>
+    </if>
+    <if test="weekTo != null and weekTo !='' " >
+       <![CDATA[  and doc_date <= #{weekTo}    ]]>
+    </if>
+  </select>
+  
+  <select id="selectByDocCode" resultMap="OrderResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from mbvendor.vp_deg
+    where doc_code = #{docCode}
+  </select>
+  
+  <select id="selectBySrcDocCode" resultMap="OrderResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from mbvendor.vp_deg
+    where src_doc_code = #{docCode}
+  </select>
+  
+  <update id="updateDegInfo" parameterType="com.mbv.biz.config.bean.DegBean" >
+    update mbvendor.vp_deg
+    <set >
+      <if test="lastModifiedUser != null" >
+        last_modified_user = #{lastModifiedUser},
+      </if>
+      <if test="lastModifiedDate != null" >
+        last_modified_date = #{lastModifiedDate},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  
+  <select id="selectDegStandByByUnitCode" resultType="java.lang.Integer" parameterType="java.lang.String" >
+    SELECT COUNT(1)
+      FROM mbvendor.vp_deg 
+      WHERE doc_state = '1'
+      and unit_code = #{unitCode}
+  </select>
+  
+  <select id="selectDegDoneByUnitCode" resultType="java.lang.Integer" parameterType="java.lang.String" >
+    SELECT COUNT(1)
+      FROM mbvendor.vp_deg 
+      WHERE doc_state != '1'
+      and unit_code = #{unitCode}
+  </select>
+  
+  <select id="selectDegByOrderSn" resultType="java.lang.Integer" parameterType="java.lang.String" >
+    SELECT COUNT(1)
+      FROM mbvendor.vp_deg 
+      WHERE order_sn = #{orderSn}
+  </select>
+  
+  <select id="selectDegByOrderSnAndUnitCode" resultType="java.lang.Integer" parameterType="com.mbv.biz.config.bean.DegBean" >
+    SELECT COUNT(1)
+      FROM mbvendor.vp_deg 
+      WHERE order_sn = #{orderSn}
+      <if test="unitCode != null and unitCode !='' " >
+        and unit_code = #{unitCode}
+      </if>
+  </select>
+  
+  <select id="selectDegBySku" resultMap="OrderResultMap" parameterType="com.mbv.biz.config.bean.DegBean" >
+    SELECT dtl.prod_num,dtl.qty,deg.wareh_code 
+      FROM mbvendor.vp_deg deg JOIN mbvendor.vp_deg_dtl dtl ON deg.id = dtl.vp_deg_id 
+      WHERE 1 = 1
+      <if test="unitCode != null and unitCode !='' " >
+        and deg.unit_code = #{unitCode}
+      </if>
+      <if test="orderSn != null and orderSn !='' " >
+        and deg.order_sn = #{orderSn}
+      </if>
+      <if test="prodNum != null and prodNum !='' " >
+        and dtl.prod_num = #{prodNum}
+      </if>
+  </select>
+  
+</mapper>

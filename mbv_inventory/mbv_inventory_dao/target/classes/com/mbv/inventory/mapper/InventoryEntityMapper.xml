@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="mbv.com.mbv.inventory.dao.impl.MbvInventoryEntityDao" >
+  <resultMap id="BaseResultMap" type="com.mbv.inventory.entity.InventoryEntity" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="prod_num" property="prodNum" jdbcType="VARCHAR" />
+    <result column="wareh_code" property="warehCode" jdbcType="VARCHAR" />
+    <result column="stk_on_hand" property="stkOnHand" jdbcType="DECIMAL" />
+    <result column="qty_committed" property="qtyCommitted" jdbcType="DECIMAL" />
+    <result column="qty_on_lock" property="qtyOnLock" jdbcType="DECIMAL" />
+    <result column="last_modified_user" property="lastModifiedUser" jdbcType="VARCHAR" />
+    <result column="last_modified_date" property="lastModifiedDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, prod_num, wareh_code, stk_on_hand, qty_committed, qty_on_lock, last_modified_user, last_modified_date
+  </sql>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from vp_wareh_prod
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mbv.inventory.entity.InventoryEntity" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into vp_wareh_prod (prod_num, wareh_code, stk_on_hand, 
+      qty_committed, qty_on_lock, last_modified_user, last_modified_date)
+    values (#{prod_num,jdbcType=VARCHAR}, #{wareh_code,jdbcType=VARCHAR}, #{stk_on_hand,jdbcType=DECIMAL}, 
+      #{qty_committed,jdbcType=DECIMAL}, #{qty_on_lock,jdbcType=DECIMAL}, #{lastModifiedUser,jdbcType=VARCHAR}, #{lastModifiedDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mbv.inventory.entity.InventoryEntity" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into vp_wareh_prod
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="prodNum != null" >
+        prod_num,
+      </if>
+      <if test="warehCode != null" >
+        wareh_code,
+      </if>
+      <if test="stkOnHand != null" >
+        stk_on_hand,
+      </if>
+      <if test="qtyCommitted != null" >
+        qty_committed,
+      </if>
+      <if test="qtyOnLock != null" >
+        qty_on_lock,
+      </if>
+      <if test="lastModifiedUser != null">
+      	last_modified_user,
+      </if>
+      <if test="lastModifiedDate != null">
+      	last_modified_date
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="prodNum != null" >
+        #{prodNum,jdbcType=VARCHAR},
+      </if>
+      <if test="warehCode != null" >
+        #{warehCode,jdbcType=VARCHAR},
+      </if>
+      <if test="stkOnHand != null" >
+        #{stkOnHand,jdbcType=DECIMAL},
+      </if>
+      <if test="qtyCommitted != null" >
+        #{qtyCommitted,jdbcType=DECIMAL},
+      </if>
+      <if test="qtyOnLock != null" >
+        #{qtyOnLock,jdbcType=DECIMAL},
+      </if>
+      <if test="lastModifiedUser != null">
+      	#{lastModifiedUser,jdbcType=VARCHAR},
+      </if>
+      <if test="lastModifiedDate != null">
+      	#{lastModifiedDate,jdbcType=TIMESTAMP}
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mbv.inventory.entity.InventoryEntity" >
+    update vp_wareh_prod
+    <set >
+      <if test="prodNum != null" >
+        prod_num = #{prodNum,jdbcType=VARCHAR},
+      </if>
+      <if test="warehCode != null" >
+        wareh_code = #{warehCode,jdbcType=VARCHAR},
+      </if>
+      <if test="stkOnHand != null" >
+        stk_on_hand = #{stkOnHand,jdbcType=DECIMAL},
+      </if>
+      <if test="qtyCommitted != null" >
+        qty_committed = #{qtyCommitted,jdbcType=DECIMAL},
+      </if>
+      <if test="qtyOnLock != null" >
+        qty_on_lock = #{qtyOnLock,jdbcType=DECIMAL},
+      </if>
+      <if test="lastModifiedUser != null">
+      	last_modified_user = #{lastModifiedUser,jdbcType=VARCHAR},
+      </if>
+      <if test="lastModifiedDate != null">
+      	last_modified_date = #{lastModifiedDate,jdbcType=TIMESTAMP}
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mbv.inventory.entity.InventoryEntity" >
+    update vp_wareh_prod
+    set prod_num = #{prodNum,jdbcType=VARCHAR},
+      wareh_code = #{warehCode,jdbcType=VARCHAR},
+      stk_on_hand = #{stkOnHand,jdbcType=DECIMAL},
+      qty_committed = #{qtyCommitted,jdbcType=DECIMAL},
+      qty_on_lock = #{qtyOnLock,jdbcType=DECIMAL}
+      last_modifie_user = #{lastModifiedUser,jdbcType=VARCHAR}
+      last_modifie_date = #{lastModifiedDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from mbvendor.vp_wareh_prod
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <!-- 前台界面查询库存记录 -->
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="com.mbv.inventory.bean.InventoryBean">
+    select 
+    <include refid="Base_Column_List" />
+    from mbvendor.vp_wareh_prod
+    where 1=1
+    <if test="prodClsNum != null and prodClsNum != '' " >
+      	and substr(prod_num,1,6) = #{prodClsNum,jdbcType=VARCHAR}
+    </if>
+    <if test="prodNum != null and prodNum != '' " >
+      	and prod_num = #{prodNum,jdbcType=VARCHAR}
+    </if>
+    <if test="warehCode != null and warehCode!=''" >
+      	and wareh_code = #{warehCode,jdbcType=VARCHAR}
+    </if>
+    <if test="stkOnHand1 != null and stkOnHand1 != '' and stkOnHand2 != null and stkOnHand2 != ''">
+      	and stk_on_hand >= #{stkOnHand1,jdbcType=DECIMAL} and stk_on_hand &lt;= #{stkOnHand2,jdbcType=DECIMAL}
+    </if>
+   <if test="stkOnHand1 != null and stkOnHand1 != '' and (stkOnHand2 == null or stkOnHand2 == '')">
+    	and stk_on_hand >= #{stkOnHand1,jdbcType=DECIMAL}
+    </if>
+    <if test="stkOnHand2 != null and stkOnHand2 != '' and (stkOnHand1 == null or stkOnHand1 == '')">
+    	and stk_on_hand &lt;= #{stkOnHand2,jdbcType=DECIMAL}
+    </if>
+   <if test="lastUpdateDate != null and lastUpdateDate != ''">
+    	and last_modified_date >= #{lastUpdateDate,jdbcType=TIMESTAMP}
+    </if>
+    order by last_modified_date desc
+  </select>
+  
+  <select id="selectByParamsCount" resultType="java.lang.Integer" parameterType="com.mbv.inventory.bean.InventoryBean" >
+    select count(1)
+    from mbvendor.vp_wareh_prod
+    where 1=1
+    <if test="prodClsNum != null and prodClsNum != '' " >
+      	and substr(prod_num,1,6) = #{prodClsNum,jdbcType=VARCHAR}
+    </if>
+    <if test="prodNum!=null and prodNum!='' " >
+      	and prod_num = #{prodNum,jdbcType=VARCHAR}
+    </if>
+    <if test="warehCode != null and warehCode!=''" >
+      	and wareh_code = #{warehCode,jdbcType=VARCHAR}
+    </if>
+    <if test="stkOnHand1 != null and stkOnHand1 != '' and stkOnHand2 != null and stkOnHand2 != ''">
+      	and stk_on_hand >= #{stkOnHand1,jdbcType=DECIMAL} and stk_on_hand &lt;= #{stkOnHand2,jdbcType=DECIMAL}
+    </if>
+   <if test="stkOnHand1 != null and stkOnHand1 != '' and (stkOnHand2 == null or stkOnHand2 == '')">
+    	and stk_on_hand >= #{stkOnHand1,jdbcType=DECIMAL}
+    </if>
+    <if test="stkOnHand2 != null and stkOnHand2 != '' and (stkOnHand1 == null or stkOnHand1 == '')">
+    	and stk_on_hand &lt;= #{stkOnHand2,jdbcType=DECIMAL}
+    </if>
+    <if test="lastUpdateDate != null and lastUpdateDate != ''">
+    	and last_modified_date >= #{lastUpdateDate,jdbcType=TIMESTAMP}
+    </if>
+  </select>
+  
+  <select id="getLastModifiedDate" parameterType="java.lang.String" resultType="java.lang.String">
+  	select last_modified_date from vp_wareh_prod where last_modified_date >= #{date, jdbcType=VARCHAR} order by last_modified_date desc limit 1
+  </select>
+  
+  
+</mapper>

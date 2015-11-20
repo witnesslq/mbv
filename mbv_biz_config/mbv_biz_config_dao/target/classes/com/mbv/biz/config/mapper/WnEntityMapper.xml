@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mbv.biz.config.dao.impl.WnEntityDao" >
+  <resultMap id="BaseResultMap" type="com.mbv.biz.config.entity.WnEntity" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="doc_code" property="docCode" jdbcType="VARCHAR" />
+    <result column="doc_date" property="docDate" jdbcType="TIMESTAMP" />
+    <result column="doc_state" property="docState" jdbcType="VARCHAR" />
+    <result column="doc_type" property="docType" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="cancel_date" property="cancelDate" jdbcType="TIMESTAMP" />
+    <result column="reply_content" property="replyContent" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="last_modified_user" property="lastModifiedUser" jdbcType="VARCHAR" />
+    <result column="last_modified_date" property="lastModifiedDate" jdbcType="TIMESTAMP" />
+    <result column="src_doc_type" property="srcDocType" jdbcType="VARCHAR" />
+    <result column="src_doc_code" property="srcDocCode" jdbcType="VARCHAR" />
+    <result column="order_sn" property="orderSn" jdbcType="VARCHAR" />
+    <result column="unit_code" property="unitCode" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, doc_code, doc_date, doc_state, doc_type, content, remark, cancel_date, reply_content, 
+    create_user, create_date, last_modified_user, last_modified_date, src_doc_type, src_doc_code, 
+    order_sn, unit_code, status
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from vp_wn
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from vp_wn
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mbv.biz.config.entity.WnEntity" >
+    insert into vp_wn (id, doc_code, doc_date, 
+      doc_state, doc_type, content, 
+      remark, cancel_date, reply_content, 
+      create_user, create_date, last_modified_user, 
+      last_modified_date, src_doc_type, src_doc_code, 
+      order_sn, unit_code, status
+      )
+    values (#{id,jdbcType=BIGINT}, #{docCode,jdbcType=VARCHAR}, #{docDate,jdbcType=TIMESTAMP}, 
+      #{docState,jdbcType=VARCHAR}, #{docType,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{cancelDate,jdbcType=TIMESTAMP}, #{replyContent,jdbcType=VARCHAR}, 
+      #{createUser,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{lastModifiedUser,jdbcType=VARCHAR}, 
+      #{lastModifiedDate,jdbcType=TIMESTAMP}, #{srcDocType,jdbcType=VARCHAR}, #{srcDocCode,jdbcType=VARCHAR}, 
+      #{orderSn,jdbcType=VARCHAR}, #{unitCode,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mbv.biz.config.entity.WnEntity" >
+    insert into vp_wn
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="docCode != null" >
+        doc_code,
+      </if>
+      <if test="docDate != null" >
+        doc_date,
+      </if>
+      <if test="docState != null" >
+        doc_state,
+      </if>
+      <if test="docType != null" >
+        doc_type,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="cancelDate != null" >
+        cancel_date,
+      </if>
+      <if test="replyContent != null" >
+        reply_content,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="lastModifiedUser != null" >
+        last_modified_user,
+      </if>
+      <if test="lastModifiedDate != null" >
+        last_modified_date,
+      </if>
+      <if test="srcDocType != null" >
+        src_doc_type,
+      </if>
+      <if test="srcDocCode != null" >
+        src_doc_code,
+      </if>
+      <if test="orderSn != null" >
+        order_sn,
+      </if>
+      <if test="unitCode != null" >
+        unit_code,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="docCode != null" >
+        #{docCode,jdbcType=VARCHAR},
+      </if>
+      <if test="docDate != null" >
+        #{docDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="docState != null" >
+        #{docState,jdbcType=VARCHAR},
+      </if>
+      <if test="docType != null" >
+        #{docType,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="cancelDate != null" >
+        #{cancelDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="replyContent != null" >
+        #{replyContent,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedUser != null" >
+        #{lastModifiedUser,jdbcType=VARCHAR},
+      </if>
+      <if test="lastModifiedDate != null" >
+        #{lastModifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="srcDocType != null" >
+        #{srcDocType,jdbcType=VARCHAR},
+      </if>
+      <if test="srcDocCode != null" >
+        #{srcDocCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSn != null" >
+        #{orderSn,jdbcType=VARCHAR},
+      </if>
+      <if test="unitCode != null" >
+        #{unitCode,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mbv.biz.config.entity.WnEntity" >
+    update vp_wn
+    <set >
+      <if test="docCode != null" >
+        doc_code = #{docCode,jdbcType=VARCHAR},
+      </if>
+      <if test="docDate != null" >
+        doc_date = #{docDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="docState != null" >
+        doc_state = #{docState,jdbcType=VARCHAR},
+      </if>
+      <if test="docType != null" >
+        doc_type = #{docType,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="cancelDate != null" >
+        cancel_date = #{cancelDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="replyContent != null" >
+        reply_content = #{replyContent,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedUser != null" >
+        last_modified_user = #{lastModifiedUser,jdbcType=VARCHAR},
+      </if>
+      <if test="lastModifiedDate != null" >
+        last_modified_date = #{lastModifiedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="srcDocType != null" >
+        src_doc_type = #{srcDocType,jdbcType=VARCHAR},
+      </if>
+      <if test="srcDocCode != null" >
+        src_doc_code = #{srcDocCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSn != null" >
+        order_sn = #{orderSn,jdbcType=VARCHAR},
+      </if>
+      <if test="unitCode != null" >
+        unit_code = #{unitCode,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mbv.biz.config.entity.WnEntity" >
+    update vp_wn
+    set doc_code = #{docCode,jdbcType=VARCHAR},
+      doc_date = #{docDate,jdbcType=TIMESTAMP},
+      doc_state = #{docState,jdbcType=VARCHAR},
+      doc_type = #{docType,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      cancel_date = #{cancelDate,jdbcType=TIMESTAMP},
+      reply_content = #{replyContent,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      last_modified_user = #{lastModifiedUser,jdbcType=VARCHAR},
+      last_modified_date = #{lastModifiedDate,jdbcType=TIMESTAMP},
+      src_doc_type = #{srcDocType,jdbcType=VARCHAR},
+      src_doc_code = #{srcDocCode,jdbcType=VARCHAR},
+      order_sn = #{orderSn,jdbcType=VARCHAR},
+      unit_code = #{unitCode,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

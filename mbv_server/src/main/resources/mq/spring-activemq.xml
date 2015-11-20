@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    
+	<!-- 创建工厂连接 -->
+	<bean id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+		<property name="brokerURL" value="${active.mq.broker}" />
+	</bean>
+	
+	
+	<!-- activeMQ消息目标 队列 -->
+	<bean id="QULOGIPROBLEM" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg index="0" value="QULOGIPROBLEM"></constructor-arg>
+	</bean>
+	
+	<!-- activeMQ消息目标 主题-->
+	<bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="connectionFactory" />
+	</bean>
+	
+	<bean id="mqWnService" class="com.mbv.biz.config.mq.service.impl.MqWnServiceImpl">
+		<property name="jmsTemplate" ref="jmsTemplate" />
+		<property name="destination" ref="QULOGIPROBLEM" />
+	</bean>
+	
+</beans>

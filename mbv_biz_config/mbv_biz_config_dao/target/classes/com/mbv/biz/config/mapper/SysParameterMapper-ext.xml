@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="mbv.com.mbv.biz.config.dao.impl.SysParameterEntityDao" >
+
+	<select id="selectByParams" resultMap="BaseResultMap" parameterType="com.mbv.biz.config.entity.SysParameterEntity">
+		select 
+	  	<include refid="Base_Column_List" />
+	  	from mbvendor.sys_parameter
+	  	where 1=1
+	  	<if test="parmCode != null and parmCode != ''">
+	  		and parm_code = #{parmCode,jdbcType=VARCHAR}
+	  	</if>
+	</select>
+	<select id="selectByPramCode" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select 
+	  	<include refid="Base_Column_List" />
+	  	from mbvendor.sys_parameter
+	  	where 1=1 and parm_code = #{parmCode,jdbcType=VARCHAR}
+	</select>
+</mapper>

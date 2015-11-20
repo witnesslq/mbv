@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mbv.biz.config.dao.DegEntityMapper" >
+  <resultMap id="BaseResultMap" type="com.mbv.biz.config.entity.DegEntity" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="doc_code" property="docCode" jdbcType="VARCHAR" />
+    <result column="doc_date" property="docDate" jdbcType="TIMESTAMP" />
+    <result column="doc_state" property="docState" jdbcType="VARCHAR" />
+    <result column="unit_code" property="unitCode" jdbcType="VARCHAR" />
+    <result column="wareh_code" property="warehCode" jdbcType="VARCHAR" />
+    <result column="ttl_qty" property="ttlQty" jdbcType="DECIMAL" />
+    <result column="ttl_val" property="ttlVal" jdbcType="DECIMAL" />
+    <result column="src_doc_type" property="srcDocType" jdbcType="VARCHAR" />
+    <result column="src_doc_code" property="srcDocCode" jdbcType="VARCHAR" />
+    <result column="cust_name" property="custName" jdbcType="VARCHAR" />
+    <result column="receivables" property="receivables" jdbcType="DECIMAL" />
+    <result column="consignee" property="consignee" jdbcType="VARCHAR" />
+    <result column="moblie" property="moblie" jdbcType="VARCHAR" />
+    <result column="country" property="country" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="district" property="district" jdbcType="VARCHAR" />
+    <result column="deliv_address" property="delivAddress" jdbcType="VARCHAR" />
+    <result column="deliv_pstd" property="delivPstd" jdbcType="VARCHAR" />
+    <result column="express_code" property="expressCode" jdbcType="VARCHAR" />
+    <result column="shipping_fee" property="shippingFee" jdbcType="DECIMAL" />
+    <result column="tsp_com_code" property="tspComCode" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="last_modified_user" property="lastModifiedUser" jdbcType="VARCHAR" />
+    <result column="last_modified_date" property="lastModifiedDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, doc_code, doc_date, doc_state, unit_code, wareh_code, ttl_qty, ttl_val, src_doc_type, 
+    src_doc_code, cust_name, receivables, consignee, moblie, country, province, city, 
+    district, deliv_address, deliv_pstd, express_code, shipping_fee, tsp_com_code, create_user, 
+    create_date, last_modified_user, last_modified_date
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from vp_deg
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from vp_deg
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mbv.biz.config.entity.DegEntity" >
+    insert into vp_deg (id, doc_code, doc_date, 
+      doc_state, unit_code, wareh_code, 
+      ttl_qty, ttl_val, src_doc_type, 
+      src_doc_code, cust_name, receivables, 
+      consignee, moblie, country, 
+      province, city, district, 
+      deliv_address, deliv_pstd, express_code, 
+      shipping_fee, tsp_com_code, create_user, 
+      create_date, last_modified_user, last_modified_date
+      )
+    values (#{id,jdbcType=BIGINT}, #{docCode,jdbcType=VARCHAR}, #{docDate,jdbcType=TIMESTAMP}, 
+      #{docState,jdbcType=VARCHAR}, #{unitCode,jdbcType=VARCHAR}, #{warehCode,jdbcType=VARCHAR}, 
+      #{ttlQty,jdbcType=DECIMAL}, #{ttlVal,jdbcType=DECIMAL}, #{srcDocType,jdbcType=VARCHAR}, 
+      #{srcDocCode,jdbcType=VARCHAR}, #{custName,jdbcType=VARCHAR}, #{receivables,jdbcType=DECIMAL}, 
+      #{consignee,jdbcType=VARCHAR}, #{moblie,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR}, 
+      #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{district,jdbcType=VARCHAR}, 
+      #{delivAddress,jdbcType=VARCHAR}, #{delivPstd,jdbcType=VARCHAR}, #{expressCode,jdbcType=VARCHAR}, 
+      #{shippingFee,jdbcType=DECIMAL}, #{tspComCode,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{lastModifiedUser,jdbcType=VARCHAR}, #{lastModifiedDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mbv.biz.config.entity.DegEntity" >
+    insert into vp_deg
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="docCode != null" >
+        doc_code,
+      </if>
+      <if test="docDate != null" >
+        doc_date,
+      </if>
+      <if test="docState != null" >
+        doc_state,
+      </if>
+      <if test="unitCode != null" >
+        unit_code,
+      </if>
+      <if test="warehCode != null" >
+        wareh_code,
+      </if>
+      <if test="ttlQty != null" >
+        ttl_qty,
+      </if>
+      <if test="ttlVal != null" >
+        ttl_val,
+      </if>
+      <if test="srcDocType != null" >
+        src_doc_type,
+      </if>
+      <if test="srcDocCode != null" >
+        src_doc_code,
+      </if>
+      <if test="custName != null" >
+        cust_name,
+      </if>
+      <if test="receivables != null" >
+        receivables,
+      </if>
+      <if test="consignee != null" >
+        consignee,
+      </if>
+      <if test="moblie != null" >
+        moblie,
+      </if>
+      <if test="country != null" >
+        country,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="district != null" >
+        district,
+      </if>
+      <if test="delivAddress != null" >
+        deliv_address,
+      </if>
+      <if test="delivPstd != null" >
+        deliv_pstd,
+      </if>
+      <if test="expressCode != null" >
+        express_code,
+      </if>
+      <if test="shippingFee != null" >
+        shipping_fee,
+      </if>
+      <if test="tspComCode != null" >
+        tsp_com_code,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="lastModifiedUser != null" >
+        last_modified_user,
+      </if>
+      <if test="lastModifiedDate != null" >
+        last_modified_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="docCode != null" >
+        #{docCode,jdbcType=VARCHAR},
+      </if>
+      <if test="docDate != null" >
+        #{docDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="docState != null" >
+        #{docState,jdbcType=VARCHAR},
+      </if>
+      <if test="unitCode != null" >
+        #{unitCode,jdbcType=VARCHAR},
+      </if>
+      <if test="warehCode != null" >
+        #{warehCode,jdbcType=VARCHAR},
+      </if>
+      <if test="ttlQty != null" >
+        #{ttlQty,jdbcType=DECIMAL},
+      </if>
+      <if test="ttlVal != null" >
+        #{ttlVal,jdbcType=DECIMAL},
+      </if>
+      <if test="srcDocType != null" >
+        #{srcDocType,jdbcType=VARCHAR},
+      </if>
+      <if test="srcDocCode != null" >
+        #{srcDocCode,jdbcType=VARCHAR},
+      </if>
+      <if test="custName != null" >
+        #{custName,jdbcType=VARCHAR},
+      </if>
+      <if test="receivables != null" >
+        #{receivables,jdbcType=DECIMAL},
+      </if>
+      <if test="consignee != null" >
+        #{consignee,jdbcType=VARCHAR},
+      </if>
+      <if test="moblie != null" >
+        #{moblie,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null" >
+        #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="district != null" >
+        #{district,jdbcType=VARCHAR},
+      </if>
+      <if test="delivAddress != null" >
+        #{delivAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="delivPstd != null" >
+        #{delivPstd,jdbcType=VARCHAR},
+      </if>
+      <if test="expressCode != null" >
+        #{expressCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingFee != null" >
+        #{shippingFee,jdbcType=DECIMAL},
+      </if>
+      <if test="tspComCode != null" >
+        #{tspComCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedUser != null" >
+        #{lastModifiedUser,jdbcType=VARCHAR},
+      </if>
+      <if test="lastModifiedDate != null" >
+        #{lastModifiedDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mbv.biz.config.entity.DegEntity" >
+    update vp_deg
+    <set >
+      <if test="docCode != null" >
+        doc_code = #{docCode,jdbcType=VARCHAR},
+      </if>
+      <if test="docDate != null" >
+        doc_date = #{docDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="docState != null" >
+        doc_state = #{docState,jdbcType=VARCHAR},
+      </if>
+      <if test="unitCode != null" >
+        unit_code = #{unitCode,jdbcType=VARCHAR},
+      </if>
+      <if test="warehCode != null" >
+        wareh_code = #{warehCode,jdbcType=VARCHAR},
+      </if>
+      <if test="ttlQty != null" >
+        ttl_qty = #{ttlQty,jdbcType=DECIMAL},
+      </if>
+      <if test="ttlVal != null" >
+        ttl_val = #{ttlVal,jdbcType=DECIMAL},
+      </if>
+      <if test="srcDocType != null" >
+        src_doc_type = #{srcDocType,jdbcType=VARCHAR},
+      </if>
+      <if test="srcDocCode != null" >
+        src_doc_code = #{srcDocCode,jdbcType=VARCHAR},
+      </if>
+      <if test="custName != null" >
+        cust_name = #{custName,jdbcType=VARCHAR},
+      </if>
+      <if test="receivables != null" >
+        receivables = #{receivables,jdbcType=DECIMAL},
+      </if>
+      <if test="consignee != null" >
+        consignee = #{consignee,jdbcType=VARCHAR},
+      </if>
+      <if test="moblie != null" >
+        moblie = #{moblie,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null" >
+        country = #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="district != null" >
+        district = #{district,jdbcType=VARCHAR},
+      </if>
+      <if test="delivAddress != null" >
+        deliv_address = #{delivAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="delivPstd != null" >
+        deliv_pstd = #{delivPstd,jdbcType=VARCHAR},
+      </if>
+      <if test="expressCode != null" >
+        express_code = #{expressCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingFee != null" >
+        shipping_fee = #{shippingFee,jdbcType=DECIMAL},
+      </if>
+      <if test="tspComCode != null" >
+        tsp_com_code = #{tspComCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedUser != null" >
+        last_modified_user = #{lastModifiedUser,jdbcType=VARCHAR},
+      </if>
+      <if test="lastModifiedDate != null" >
+        last_modified_date = #{lastModifiedDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mbv.biz.config.entity.DegEntity" >
+    update vp_deg
+    set doc_code = #{docCode,jdbcType=VARCHAR},
+      doc_date = #{docDate,jdbcType=TIMESTAMP},
+      doc_state = #{docState,jdbcType=VARCHAR},
+      unit_code = #{unitCode,jdbcType=VARCHAR},
+      wareh_code = #{warehCode,jdbcType=VARCHAR},
+      ttl_qty = #{ttlQty,jdbcType=DECIMAL},
+      ttl_val = #{ttlVal,jdbcType=DECIMAL},
+      src_doc_type = #{srcDocType,jdbcType=VARCHAR},
+      src_doc_code = #{srcDocCode,jdbcType=VARCHAR},
+      cust_name = #{custName,jdbcType=VARCHAR},
+      receivables = #{receivables,jdbcType=DECIMAL},
+      consignee = #{consignee,jdbcType=VARCHAR},
+      moblie = #{moblie,jdbcType=VARCHAR},
+      country = #{country,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      district = #{district,jdbcType=VARCHAR},
+      deliv_address = #{delivAddress,jdbcType=VARCHAR},
+      deliv_pstd = #{delivPstd,jdbcType=VARCHAR},
+      express_code = #{expressCode,jdbcType=VARCHAR},
+      shipping_fee = #{shippingFee,jdbcType=DECIMAL},
+      tsp_com_code = #{tspComCode,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      last_modified_user = #{lastModifiedUser,jdbcType=VARCHAR},
+      last_modified_date = #{lastModifiedDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

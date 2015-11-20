@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo  
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd  
+        ">
+     
+	<!-- registry address, used for service to register itself-->
+	<dubbo:registry protocol="zookeeper"  address="${user.dubbo.registry}"  />
+	
+	<dubbo:reference id="unitProductService"  interface="com.metersbonwe.pca.service.UnitProductService" check="false" group="test" />
+	
+	<dubbo:reference id="smsService"  interface="com.metersbonwe.sms.send.api.SMSService" check="false" />
+	 
+</beans> 

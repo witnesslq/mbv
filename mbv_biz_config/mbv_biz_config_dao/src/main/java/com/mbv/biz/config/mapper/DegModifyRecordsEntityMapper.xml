@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mbv.biz.config.dao.impl.DegModifyRecordsEntityDao" >
+  <resultMap id="BaseResultMap" type="com.mbv.biz.config.entity.DegModifyRecordsEntity" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="vp_deg_code" property="vpDegCode" jdbcType="VARCHAR" />
+    <result column="modify_code" property="modifyCode" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="deal_sugst" property="dealSugst" jdbcType="VARCHAR" />
+    <result column="original_val_desc" property="originalValDesc" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="last_modified_user" property="lastModifiedUser" jdbcType="VARCHAR" />
+    <result column="last_modified_date" property="lastModifiedDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, vp_deg_code, modify_code, status, deal_sugst, original_val_desc, create_user, 
+    create_date, last_modified_user, last_modified_date
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from vp_deg_modify_records
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from vp_deg_modify_records
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.mbv.biz.config.entity.DegModifyRecordsEntity" >
+    insert into vp_deg_modify_records (id, vp_deg_code, modify_code, 
+      status, deal_sugst, original_val_desc, 
+      create_user, create_date, last_modified_user, 
+      last_modified_date)
+    values (#{id,jdbcType=BIGINT}, #{vpDegCode,jdbcType=VARCHAR}, #{modifyCode,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT}, #{dealSugst,jdbcType=VARCHAR}, #{originalValDesc,jdbcType=VARCHAR}, 
+      #{createUser,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{lastModifiedUser,jdbcType=VARCHAR}, 
+      #{lastModifiedDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mbv.biz.config.entity.DegModifyRecordsEntity" >
+    insert into vp_deg_modify_records
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="vpDegCode != null" >
+        vp_deg_code,
+      </if>
+      <if test="modifyCode != null" >
+        modify_code,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="dealSugst != null" >
+        deal_sugst,
+      </if>
+      <if test="originalValDesc != null" >
+        original_val_desc,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="lastModifiedUser != null" >
+        last_modified_user,
+      </if>
+      <if test="lastModifiedDate != null" >
+        last_modified_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="vpDegCode != null" >
+        #{vpDegCode,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyCode != null" >
+        #{modifyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="dealSugst != null" >
+        #{dealSugst,jdbcType=VARCHAR},
+      </if>
+      <if test="originalValDesc != null" >
+        #{originalValDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedUser != null" >
+        #{lastModifiedUser,jdbcType=VARCHAR},
+      </if>
+      <if test="lastModifiedDate != null" >
+        #{lastModifiedDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mbv.biz.config.entity.DegModifyRecordsEntity" >
+    update vp_deg_modify_records
+    <set >
+      <if test="vpDegCode != null" >
+        vp_deg_code = #{vpDegCode,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyCode != null" >
+        modify_code = #{modifyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="dealSugst != null" >
+        deal_sugst = #{dealSugst,jdbcType=VARCHAR},
+      </if>
+      <if test="originalValDesc != null" >
+        original_val_desc = #{originalValDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedUser != null" >
+        last_modified_user = #{lastModifiedUser,jdbcType=VARCHAR},
+      </if>
+      <if test="lastModifiedDate != null" >
+        last_modified_date = #{lastModifiedDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mbv.biz.config.entity.DegModifyRecordsEntity" >
+    update vp_deg_modify_records
+    set vp_deg_code = #{vpDegCode,jdbcType=VARCHAR},
+      modify_code = #{modifyCode,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      deal_sugst = #{dealSugst,jdbcType=VARCHAR},
+      original_val_desc = #{originalValDesc,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      last_modified_user = #{lastModifiedUser,jdbcType=VARCHAR},
+      last_modified_date = #{lastModifiedDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

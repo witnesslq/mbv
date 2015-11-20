@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mbv.inventory.dao.impl.VpSenderEntityDao" >
+  <resultMap id="BaseResultMap" type="com.mbv.inventory.entity.VpSenderEntity" >
+   
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="unit_code" property="unitCode" jdbcType="VARCHAR" />
+    <result column="wareh_code" property="warehCode" jdbcType="VARCHAR" />
+    <result column="consignor" property="consignor" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="country" property="country" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="district" property="district" jdbcType="VARCHAR" />
+    <result column="zip" property="zip" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="default_status" property="defaultStatus" jdbcType="TINYINT" />
+    <result column="short_name" property="shortName" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="last_modified_user" property="lastModifiedUser" jdbcType="VARCHAR" />
+    <result column="last_modified_date" property="lastModifiedDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+   
+    id, unit_code, wareh_code, consignor, mobile, telephone, country, province, 
+    city, district, zip, address, default_status, short_name, remark, create_user, create_date, 
+    last_modified_user, last_modified_date
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    
+    select 
+    <include refid="Base_Column_List" />
+    from vp_sender
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+   
+    delete from vp_sender
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mbv.inventory.entity.VpSenderEntity" >
+    
+    insert into vp_sender (id, unit_code, 
+      wareh_code, consignor, mobile, 
+      telephone, country, province, 
+      city, district, zip, 
+      address, default_status, short_name, 
+      remark, create_user, create_date, 
+      last_modified_user, last_modified_date)
+    values (#{id,jdbcType=INTEGER}, #{unitCode,jdbcType=VARCHAR}, 
+      #{warehCode,jdbcType=VARCHAR}, #{consignor,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, 
+      #{telephone,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
+      #{city,jdbcType=VARCHAR}, #{district,jdbcType=VARCHAR}, #{zip,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{defaultStatus,jdbcType=TINYINT}, #{shortName,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{lastModifiedUser,jdbcType=VARCHAR}, #{lastModifiedDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.mbv.inventory.entity.VpSenderEntity" >
+    insert into vp_sender
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="unitCode != null" >
+        unit_code,
+      </if>
+      <if test="warehCode != null" >
+        wareh_code,
+      </if>
+      <if test="consignor != null" >
+        consignor,
+      </if>
+      <if test="mobile != null" >
+        mobile,
+      </if>
+      <if test="telephone != null" >
+        telephone,
+      </if>
+      <if test="country != null" >
+        country,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="district != null" >
+        district,
+      </if>
+      <if test="zip != null" >
+        zip,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="defaultStatus != null" >
+        default_status,
+      </if>
+      <if test="shortName != null" >
+        short_name,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="lastModifiedUser != null" >
+        last_modified_user,
+      </if>
+      <if test="lastModifiedDate != null" >
+        last_modified_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="unitCode != null" >
+        #{unitCode,jdbcType=VARCHAR},
+      </if>
+      <if test="warehCode != null" >
+        #{warehCode,jdbcType=VARCHAR},
+      </if>
+      <if test="consignor != null" >
+        #{consignor,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null" >
+        #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null" >
+        #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="district != null" >
+        #{district,jdbcType=VARCHAR},
+      </if>
+      <if test="zip != null" >
+        #{zip,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="defaultStatus != null" >
+        #{defaultStatus,jdbcType=TINYINT},
+      </if>
+      <if test="shortName != null" >
+        #{shortName,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedUser != null" >
+        #{lastModifiedUser,jdbcType=VARCHAR},
+      </if>
+      <if test="lastModifiedDate != null" >
+        #{lastModifiedDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mbv.inventory.entity.VpSenderEntity" >
+    
+    update vp_sender
+    <set >
+      <if test="unitCode != null" >
+        unit_code = #{unitCode,jdbcType=VARCHAR},
+      </if>
+      <if test="warehCode != null" >
+        wareh_code = #{warehCode,jdbcType=VARCHAR},
+      </if>
+      <if test="consignor != null" >
+        consignor = #{consignor,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="telephone != null" >
+        telephone = #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null" >
+        country = #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="district != null" >
+        district = #{district,jdbcType=VARCHAR},
+      </if>
+      <if test="zip != null" >
+        zip = #{zip,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="defaultStatus != null" >
+        default_status = #{defaultStatus,jdbcType=TINYINT},
+      </if>
+      <if test="shortName != null" >
+        short_name = #{shortName,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedUser != null" >
+        last_modified_user = #{lastModifiedUser,jdbcType=VARCHAR},
+      </if>
+      <if test="lastModifiedDate != null" >
+        last_modified_date = #{lastModifiedDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mbv.inventory.entity.VpSenderEntity" >
+    
+    update vp_sender
+    set unit_code = #{unitCode,jdbcType=VARCHAR},
+      wareh_code = #{warehCode,jdbcType=VARCHAR},
+      consignor = #{consignor,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      telephone = #{telephone,jdbcType=VARCHAR},
+      country = #{country,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      district = #{district,jdbcType=VARCHAR},
+      zip = #{zip,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      default_status = #{defaultStatus,jdbcType=TINYINT},
+      short_name = #{shortName,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      last_modified_user = #{lastModifiedUser,jdbcType=VARCHAR},
+      last_modified_date = #{lastModifiedDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByUnitCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    
+    select 
+    <include refid="Base_Column_List" />
+    from vp_sender
+    where unit_code = #{unitCode,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByWarehCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    
+    select 
+    <include refid="Base_Column_List" />
+    from vp_sender
+    where wareh_code = #{warehCode,jdbcType=VARCHAR}
+  </select>
+  <select id="getCountByWarehCode" resultType="java.lang.Integer" parameterType="java.lang.String" >
+    
+    select count(1)
+    from vp_sender
+    where wareh_code = #{warehCode,jdbcType=VARCHAR}
+  </select>
+</mapper>

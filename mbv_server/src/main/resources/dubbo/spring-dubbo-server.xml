@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo  
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd  
+        ">
+     
+	<!-- Application name -->  
+	<dubbo:application name="${dubbo.application.name}" />  
+    <dubbo:provider timeout="${dubbo.server.timeout}" />
+	<!-- registry address, used for service to register itself-->
+	<dubbo:registry protocol="zookeeper"  address="${dubbo.registry.address}"  />
+	
+	<!-- expose this service through dubbo protocol, through port 20880 --> 
+	<dubbo:protocol name="dubbo" port="${dubbo.protocol.port}"  /> 
+	
+	<dubbo:protocol id="json" name="json" port="${dubbo.server.port}" contextpath="mbv_server" server="servlet" />
+	
+	<dubbo:service interface="com.mbv.inventory.service.InventoryService" ref="inventoryService" timeout="10000"  group="HQ01UE264"/>
+	
+	<dubbo:service interface="com.mbv.comm.api.SyncInventoryService" ref="syncInventoryService" timeout="30000"  group="HQ01UE264"/>
+	
+	<dubbo:service interface="com.mbv.inventory.service.VpGrnService" ref="vpGrnService" timeout="10000" group="HQ01UE264"/>
+	
+	<dubbo:service interface="com.mbv.inventory.service.VpGdnService" ref="vpGdnService" timeout="10000" group="HQ01UE264"/>
+	
+	<dubbo:service interface="com.mbv.biz.config.service.UserService" ref="userService" timeout="10000"  group="HQ01UE264"/>
+	
+	<dubbo:service interface="com.mbv.biz.config.service.ChartService" ref="chartService" timeout="10000"  group="HQ01UE264"/>
+	
+	<dubbo:service interface="com.mbv.inventory.service.DeliveryService" ref="deliveryService" timeout="10000" group="HQ01UE264"/>
+	
+	<dubbo:service interface="com.mbv.biz.config.service.ReportService" ref="reportService" timeout="10000" group="HQ01UE264" />
+	
+	<dubbo:service interface="com.mbv.biz.config.service.WnService" ref="wnService" timeout="10000" group="HQ01UE264"/>
+	
+	<dubbo:service interface="com.mbv.biz.config.mq.service.MqWnService" ref="mqWnService" timeout="10000" group="HQ01UE264"/>
+	
+	<dubbo:service interface="com.mbv.biz.config.iface.service.NewErpOrgService" ref="newErpOrgService" timeout="10000" group="HQ01UE264"/>
+	
+	<dubbo:service interface="com.mbv.comm.api.UDCommService" ref="uDCommService" timeout="10000" group="HQ01UE264"/>
+	
+	<dubbo:service interface="com.mbv.biz.config.service.SendMessageService" ref="sendMessageService" timeout="10000" group="HQ01UE264"/>
+	
+	<dubbo:service interface="com.mbv.biz.config.service.SyncReportService" ref="syncReportService" timeout="30000"  group="HQ01UE264"/>
+	
+	<dubbo:service interface="com.mbv.biz.config.service.SysParameterService" ref="sysParameterService" timeout="30000" group="HQ01UE264"/>
+	
+</beans> 
